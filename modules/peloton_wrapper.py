@@ -4,6 +4,7 @@ https://app.swaggerhub.com/apis/DovOps/peloton-unofficial-api/0.2.3
 """
 
 import requests
+from datetime import datetime, timedelta
 
 # Global vars
 USER_AGENT = "web"
@@ -207,14 +208,22 @@ class PelotonClient:
         return response[0]
 
     def accumulate_work_and_distance(self, workouts):
-        total_work = 0
-        total_distance = 0
+        weekly_totals = {}
 
         for workout in workouts:
-            total_work += workout.get("total_work", 0)
+            # Convert the 'created' timestamp to a datetime object
+            created_date = datetime.fromtimestamp(workout["created"])
+            # Determine the start of the week (Monday)
+            start_of_week = created_date - timedelta(days=created_date.weekday())
+            start_of_week_str = start_of_week.strftime("%Y-%m-%d")
+
+            if start_of_week_str not in weekly_totals:
+                weekly_totals[start_of_week_str] = {"total_work": 0, "total_distance": 0}
+
+            weekly_totals[start_of_week_str]["total_work"] += workout.get("total_work", 0)
 
             ride = workout.get("ride", {})
             if "distance" in ride and ride["distance"] is not None:
-                total_distance += ride["distance"]
+                weekly_totals[start_of_week_str]["total_distance"] += ride["distance"]
 
-        return total_work, total_distance
+        return weekly_totals
