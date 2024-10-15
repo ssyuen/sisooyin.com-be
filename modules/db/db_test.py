@@ -10,10 +10,10 @@ def db_client():
     client = Client(db_file)
     
     # Create tables
-    client.query("CREATE TABLE IF NOT EXISTS episodes (id INTEGER PRIMARY KEY, title TEXT, description TEXT, saga_id INTEGER)")
-    client.query("CREATE TABLE IF NOT EXISTS watched_episodes (episode_id INTEGER, watched_date TEXT)")
+    client.query("CREATE TABLE IF NOT EXISTS episode (id INTEGER PRIMARY KEY, title TEXT, description TEXT, saga_id INTEGER)")
+    client.query("CREATE TABLE IF NOT EXISTS watched_episode (episode_id INTEGER, workout_id INTEGER, watched_date TEXT)")
     client.query("CREATE TABLE IF NOT EXISTS saga (id INTEGER PRIMARY KEY, title TEXT, saga_episode_start INTEGER, saga_episode_end INTEGER)")
-    client.query("CREATE TABLE IF NOT EXISTS workouts (id INTEGER PRIMARY KEY, distance INTEGER, work FLOAT, date TEXT)")
+    client.query("CREATE TABLE IF NOT EXISTS workout (id INTEGER PRIMARY KEY, distance INTEGER, work FLOAT, date TEXT)")
 
     yield client
 
@@ -57,14 +57,14 @@ def test_insert_episode(db_client):
         "saga_id": 2
     }
 
-    # Insert the episode data into the episodes table
+    # Insert the episode data into the episode table
     db_client.query(
-        "INSERT INTO episodes (id, title, description, saga_id) VALUES (?, ?, ?, ?)",
+        "INSERT INTO episode (id, title, description, saga_id) VALUES (?, ?, ?, ?)",
         (episode_data["id"], episode_data["title"], episode_data["description"], episode_data["saga_id"])
     )
 
     # Verify the data was inserted correctly
-    result = db_client.query("SELECT * FROM episodes WHERE id = ?", (episode_data["id"],))
+    result = db_client.query("SELECT * FROM episode WHERE id = ?", (episode_data["id"],))
     assert len(result) == 1
     assert result[0] == (episode_data["id"], episode_data["title"], episode_data["description"], episode_data["saga_id"])
 
@@ -73,19 +73,21 @@ def test_insert_watched_episode(db_client):
     # Example watched episode data
     watched_episode_data = {
         "episode_id": 1,
+        "workout_id": 1,
         "watched_date": "2023-10-01"
     }
 
-    # Insert the watched episode data into the watched_episodes table
+    # Insert the watched episode data into the watched_episode table
     db_client.query(
-        "INSERT INTO watched_episodes (episode_id, watched_date) VALUES (?, ?)",
-        (watched_episode_data["episode_id"], watched_episode_data["watched_date"])
+        "INSERT INTO watched_episode (episode_id, workout_id, watched_date) VALUES (?, ?, ?)",
+        (watched_episode_data["episode_id"], watched_episode_data['workout_id'],watched_episode_data["watched_date"])
     )
 
     # Verify the data was inserted correctly
-    result = db_client.query("SELECT * FROM watched_episodes WHERE episode_id = ?", (watched_episode_data["episode_id"],))
+    result = db_client.query("SELECT * FROM watched_episode WHERE episode_id = ? AND workout_id = ?", (watched_episode_data["episode_id"],watched_episode_data['workout_id']))
+    print(result, watched_episode_data)
     assert len(result) == 1
-    assert result[0] == (watched_episode_data["episode_id"], watched_episode_data["watched_date"])
+    assert result[0] == (watched_episode_data["episode_id"], watched_episode_data["workout_id"], watched_episode_data["watched_date"])
 
 def test_insert_workout(db_client):
     # Example workout data
@@ -96,14 +98,14 @@ def test_insert_workout(db_client):
         "work": 300
     }
 
-    # Insert the workout data into the workouts table
+    # Insert the workout data into the workout table
     db_client.query(
-        "INSERT INTO workouts (id, distance, work, date) VALUES (?, ?, ?, ?)",
+        "INSERT INTO workout (id, distance, work, date) VALUES (?, ?, ?, ?)",
         (workout_data["id"], workout_data["distance"], workout_data["work"],  workout_data["date"])
     )
 
     # Verify the data was inserted correctly
-    result = db_client.query("SELECT * FROM workouts WHERE id = ?", (workout_data["id"],))
+    result = db_client.query("SELECT * FROM workout WHERE id = ?", (workout_data["id"],))
     assert len(result) == 1
     assert result[0] == (workout_data["id"],  workout_data["distance"], workout_data["work"], workout_data["date"])
 

@@ -4,10 +4,10 @@ from utils import get_daily_db_file, parse_saga_episode
 if __name__ == '__main__':
     db_file = get_daily_db_file()
     db_client = Client(db_file)
-    db_client.query("CREATE TABLE IF NOT EXISTS episodes (id INTEGER PRIMARY KEY, title TEXT, description TEXT, saga_id INTEGER)")
-    db_client.query("CREATE TABLE IF NOT EXISTS watched_episodes (episode_id INTEGER, watched_date TEXT)")
+    db_client.query("CREATE TABLE IF NOT EXISTS episode (id INTEGER PRIMARY KEY, title TEXT, description TEXT, saga_id INTEGER)")
+    db_client.query("CREATE TABLE IF NOT EXISTS watched_episode (episode_id INTEGER, workout_id INTEGER, watched_date TEXT)")
     db_client.query("CREATE TABLE IF NOT EXISTS saga (id INTEGER PRIMARY KEY, title TEXT, saga_episode_start TEXT, saga_episode_end TEXT)")
-    db_client.query("CREATE TABLE IF NOT EXISTS workouts (id INTEGER PRIMARY KEY, distance INTEGER, work FLOAT, date TEXT)")
+    db_client.query("CREATE TABLE IF NOT EXISTS workout (id INTEGER PRIMARY KEY, distance INTEGER, work FLOAT, date TEXT)")
 
 
     # Example saga data

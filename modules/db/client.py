@@ -8,13 +8,13 @@ class Client:
         self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
 
-    def query(self, query, params=None):
-        if params:
-            self.cursor.execute(query, params)
-        else:
-            self.cursor.execute(query)
-
+    def query(self, query, params=()):
+        self.cursor.execute(query, params)
+        self.conn.commit()
         return self.cursor.fetchall()
+    def executemany(self, query, params):
+        self.cursor.executemany(query, params)
+        self.conn.commit()
     def dump_db(self, dump_type='db'):
         dump_dir = '/data/db/dumps'
         if not os.path.exists(dump_dir):
