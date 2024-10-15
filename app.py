@@ -62,6 +62,8 @@ def add_watched_episode():
 
         saga_id = data["saga_id"]
         episode_id = data["episode_id"]
+        watched_date = data["watched_date"]
+        workout_id = data["workout_id"]
 
         file_path = f"data/sagas/{saga_id}.json"
         if not os.path.exists(file_path):
@@ -84,8 +86,8 @@ def add_watched_episode():
         # Use the db_client to update the database if needed
         db_client = get_db_client()
         db_client.query(
-            "INSERT INTO watched_episodes (episode_id, watched_date) VALUES (?, ?)",
-            (episode_id, dumps(data))
+            "INSERT INTO watched_episodes (episode_id, workout_id, watched_date) VALUES (?, ?, ?)",
+            (episode_id, workout_id, dumps(watched_date))
         )
         return jsonify(saga_data)
     except Exception as e:
