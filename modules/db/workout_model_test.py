@@ -6,6 +6,13 @@ from workout_model import Workout
 
 @pytest.fixture(scope="module")
 def workout():
+    """
+
+    Fixture to set up and tear down a Workout instance with a temporary test database.
+
+    Yields:
+        Workout: An instance of the Workout class connected to the temporary test database.
+    """
     # Setup: Create a Client instance with a test database file
     db_file = get_daily_db_file(testing=True)
     client = Client(db_file)

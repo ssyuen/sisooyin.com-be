@@ -19,7 +19,11 @@ class Episode:
     def get_episodes(self):
         query = 'SELECT * FROM episode'
         return self.client.query(query)
-    def get_episode(self, episode_id):
+    def get_episode(self, episode_id: int):
+        """
+        Get a single episode by its ID
+        :param episode_id: int
+        """
         query = 'SELECT * FROM episode WHERE id = ?'
         return self.client.query(query, (episode_id,))
     def get_many_episodes(self, episode_ids):

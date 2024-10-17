@@ -6,6 +6,16 @@ from watched_episode_model import WatchedEpisode
 
 @pytest.fixture(scope="module")
 def watched_episode():
+    """
+    Fixture to set up and tear down a WatchedEpisode instance with a temporary test database.
+
+    This fixture creates a temporary database file and a Client instance connected to it.
+    It then creates a WatchedEpisode instance and sets up the necessary temporary tables.
+    After the tests are run, it closes the Client connection and removes the temporary database file.
+
+    Yields:
+        WatchedEpisode: An instance of the WatchedEpisode class connected to the temporary test database.
+    """
     # Setup: Create a Client instance with a test database file
     db_file = get_daily_db_file(testing=True)
     client = Client(db_file)

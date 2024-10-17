@@ -1,7 +1,11 @@
 class WatchedEpisode:
     def __init__(self, client=None):
         self.client = client
-    def create_table(self, temporary=False):
+    def ping(self):
+        return "pong"
+    def create_table(self, temporary=False, query_only=False):
+        if query_only:
+            return 'CREATE TABLE IF NOT EXISTS watched_episode (episode_id INTEGER, workout_id INTEGER, watched_date TEXT)'
         if temporary:
             query = 'CREATE TEMPORARY TABLE IF NOT EXISTS watched_episode (episode_id INTEGER, workout_id INTEGER, watched_date TEXT)'
         else:

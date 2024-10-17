@@ -4,10 +4,15 @@ import datetime
 import glob
 
 class Client:
-    def __init__(self, db_path):
+    def __init__(self, db_path="", models=[]):
         self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
+        self.models = models
 
+    def instantiate_tables(self):
+        for model in self.models:
+            t_model = model(self)
+            t_model.create_table()
     def query(self, query, params=()):
         self.cursor.execute(query, params)
         self.conn.commit()
@@ -44,6 +49,7 @@ class Client:
         with backup_conn:
             backup_conn.backup(self.conn)
         backup_conn.close()
+
 
     def __del__(self):
         self.conn.close()

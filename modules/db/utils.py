@@ -15,7 +15,7 @@ def parse_saga_episode(saga_episode):
 def get_daily_db_file(testing=False):
     # Define the directory
     top_level_dir = os.path.join(os.path.dirname(__file__), '..', '..')
-    db_dir = os.path.join(top_level_dir, 'modules', 'data', 'db', 'dumps')
+    db_dir = os.path.join(top_level_dir, 'modules', 'db', 'dumps')
 
     # Ensure the directory exists
     if not os.path.exists(db_dir):

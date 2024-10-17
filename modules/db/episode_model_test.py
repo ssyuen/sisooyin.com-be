@@ -6,6 +6,12 @@ from episode_model import Episode
 
 @pytest.fixture(scope="module")
 def episode():
+    """
+    Fixture to set up and tear down an Episode instance with a temporary test database.
+
+    Yields:
+        Episode: An instance of the Episode class connected to the temporary test database.
+    """
     # Setup: Create a Client instance with a test database file
     db_file = get_daily_db_file(testing=True)
     client = Client(db_file)

@@ -6,6 +6,12 @@ from saga_model import Saga
 
 @pytest.fixture(scope="module")
 def saga():
+    """
+    Fixture to set up and tear down a Saga instance with a temporary test database.
+
+    Yields:
+        Saga: An instance of the Saga class connected to the temporary test database.
+    """
     # Setup: Create a Client instance with a test database file
     db_file = get_daily_db_file(testing=True)
     client = Client(db_file)    

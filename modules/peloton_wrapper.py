@@ -5,6 +5,9 @@ https://app.swaggerhub.com/apis/DovOps/peloton-unofficial-api/0.2.3
 
 import requests
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Global vars
 USER_AGENT = "web"
