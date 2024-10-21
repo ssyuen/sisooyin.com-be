@@ -50,6 +50,10 @@ def create_app():
         # Add your teardown logic here
         pass
 
+    @app.route("/")
+    def home():
+        return "Root"
+
     return app
 
 app = create_app()
