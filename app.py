@@ -36,20 +36,23 @@ def list_of_blueprints():
     return [episode_route, workouts_route, 
             watched_episode_route, booklog_route]
 
-app = Flask(__name__)
-
-for route in list_of_blueprints():
-    app.register_blueprint(route)
 
 
-CORS(app)
+def create_app():
+    app=Flask(__name__)
+    for route in list_of_blueprints():
+        app.register_blueprint(route)
 
-@app.teardown_appcontext
-def close_db_client(exception):
-    db_client = g.pop('db_client', None)
-    if db_client is not None:
-        db_client.__del__()
+    CORS(app)
 
+    @app.teardown_appcontext
+    def close_db_client(exception):
+        # Add your teardown logic here
+        pass
+
+    return app
+
+app = create_app()
 
 # Run the Flask app
 if __name__ == "__main__":
