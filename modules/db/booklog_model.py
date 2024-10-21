@@ -52,16 +52,16 @@ class Booklog:
     
     def create_table(self, temporary=False):
         if temporary:
-            query = 'CREATE TEMPORARY TABLE IF NOT EXISTS booklog (id INTEGER PRIMARY KEY, title TEXT, author TEXT, pages INTEGER, rating FLOAT)'
+            query = 'CREATE TEMPORARY TABLE IF NOT EXISTS booklog (id INTEGER PRIMARY KEY, title TEXT, author TEXT, pages INTEGER, rating FLOAT, comments TEXT, description TEXT)'
         else:
-            query = 'CREATE TABLE IF NOT EXISTS booklog (id INTEGER PRIMARY KEY, title TEXT, author TEXT, pages INTEGER, rating FLOAT)'
+            query = 'CREATE TABLE IF NOT EXISTS booklog (id INTEGER PRIMARY KEY, title TEXT, author TEXT, pages INTEGER, rating FLOAT, comments TEXT, description TEXT)'
         self.client.query(query)
     def insert_book(self, book_data):
-        query = 'INSERT INTO booklog (title, author, pages, rating) VALUES ( ?, ?, ?, ?)'
-        self.client.query(query, ( book_data["title"], book_data["author"], book_data["pages"], book_data["rating"]))
+        query = 'INSERT INTO booklog (title, author, pages, rating, comments, description) VALUES ( ?, ?, ?, ?, ?, ?)'
+        self.client.query(query, ( book_data["title"], book_data["author"], book_data["pages"], book_data["rating"], book_data["comments"], book_data["description"]))
         return self.client.cursor.lastrowid
     def insert_many_books(self, books_data):
-        query = 'INSERT INTO booklog (title, author, pages, rating) VALUES ( ?, ?, ?, ?)'
+        query = 'INSERT INTO booklog (title, author, pages, rating, comments, description) VALUES ( ?, ?, ?, ?, ?, ?)'
         self.client.cursor.executemany(query, books_data)
         last_ids = self.client.cursor.fetchall()
         print(last_ids)
@@ -91,6 +91,6 @@ class Booklog:
         self.client.query(query, ids)
         return self.client.cursor.rowcount
     def update_book(self, book_data):
-        query = 'UPDATE booklog SET title = ?, author = ?, pages = ?, rating = ? WHERE id = ?'
-        self.client.query(query, (book_data["title"], book_data["author"], book_data["pages"], book_data["rating"], book_data["id"]))
+        query = 'UPDATE booklog SET title = ?, author = ?, pages = ?, rating = ?, comments = ?, description = ? WHERE id = ?'
+        self.client.query(query, (book_data["title"], book_data["author"], book_data["pages"], book_data["rating"], book_data["comments"], book_data["description"], book_data["id"]))
         return self.client.cursor.rowcount

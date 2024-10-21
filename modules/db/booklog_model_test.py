@@ -34,7 +34,9 @@ def test_insert_booklog(booklog):
         "title": "Book 1",
         "author": "Author 1",
         "pages": 100,
-        "rating": 5.0
+        "rating": 5.0,
+        "comments": "Great book!",
+        "description": "Description 1"
     }
     
     # Insert the booklog data into the booklog table
@@ -43,15 +45,15 @@ def test_insert_booklog(booklog):
     # Verify the data was inserted correctly
     result = booklog.get_book(booklog_data["id"])
     assert len(result) == 1
-    assert result[0] == (booklog_data["id"], booklog_data["title"], booklog_data["author"], booklog_data["pages"], booklog_data["rating"])
+    assert result[0] == (booklog_data["id"], booklog_data["title"], booklog_data["author"], booklog_data["pages"], booklog_data["rating"], booklog_data["comments"], booklog_data["description"])
     booklog.delete_book(booklog_data["id"])
 
 def test_insert_many_booklogs(booklog):
     # Example booklog data
     booklog_data = [
-        ("Book 1", "Author 1", 100, 5.0),
-        ("Book 2", "Author 2", 100, 4.0),
-        ("Book 3", "Author 3", 100, 3.0)
+        ("Book 1", "Author 1", 100, 5.0, "Great book!", "Description 1"),
+        ("Book 2", "Author 2", 100, 4.0, "Great book!", "Description 1"),
+        ("Book 3", "Author 3", 100, 3.0, "Great book!", "Description 1")
     ]
     
     # Insert the booklog data into the booklog table
@@ -67,9 +69,9 @@ def test_insert_many_booklogs(booklog):
 def test_get_many_booklogs(booklog):
     # Example booklog data
     booklog_data = [
-        ("Book 1", "Author 1", 100, 5.0),
-        ("Book 2", "Author 2", 100, 4.0),
-        ("Book 3", "Author 3", 100, 3.0)
+        ("Book 1", "Author 1", 100, 5.0, "Great book!", "Description 1"),
+        ("Book 2", "Author 2", 100, 4.0, "Great book!", "Description 1"),
+        ("Book 3", "Author 3", 100, 3.0, "Great book!", "Description 1")
     ]
     
     # Insert the booklog data into the booklog table
@@ -88,7 +90,9 @@ def test_get_booklog(booklog):
         "title": "Book 1",
         "author": "Author 1",
         "pages": 100,
-        "rating": 5
+        "rating": 5,
+        "comments": "Great book!",
+        "description": "Description 1"
     }
     
     # Insert the booklog data into the booklog table
@@ -99,7 +103,7 @@ def test_get_booklog(booklog):
 
     # Verify the data was retrieved correctly
     assert len(result) == 1
-    assert result[0] == (inserted_id, booklog_data["title"], booklog_data["author"], booklog_data["pages"], booklog_data["rating"])
+    assert result[0] == (inserted_id, booklog_data["title"], booklog_data["author"], booklog_data["pages"], booklog_data["rating"], booklog_data["comments"], booklog_data["description"])
     booklog.delete_book(inserted_id)
 
 def test_delete_booklog(booklog):
@@ -108,7 +112,9 @@ def test_delete_booklog(booklog):
         "title": "Book 1",
         "author": "Author 1",
         "pages": 100,
-        "rating": 5
+        "rating": 5,
+        "comments": "Great book!",
+        "description": "Description 1"
     }
     
     # Insert the booklog data into the booklog table
@@ -119,7 +125,7 @@ def test_delete_booklog(booklog):
     
     
     assert len(result) == 1
-    assert result[0] == (inserted_id, booklog_data["title"], booklog_data["author"], booklog_data["pages"], booklog_data["rating"])
+    assert result[0] == (inserted_id, booklog_data["title"], booklog_data["author"], booklog_data["pages"], booklog_data["rating"], booklog_data["comments"], booklog_data["description"])
 
     # Delete the booklog data
     booklog.delete_book(inserted_id)

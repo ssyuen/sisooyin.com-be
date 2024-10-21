@@ -49,8 +49,10 @@ def delete_many_books(book_ids):
 
 @booklog_route.route("/api/booklog/book/add", methods=["POST"])
 def add_book():
+    print(request.get_json())
     try:
         data = request.get_json()
+        print(data)
         if 'title' not in data or 'author' not in data or 'pages' not in data or 'rating' not in data:
             return jsonify({'error': 'Title, author, pages, and rating are required'}), 400
 
@@ -60,14 +62,16 @@ def add_book():
             "title": data["title"],
             "author": data["author"],
             "pages": data["pages"],
-            "rating": data["rating"]
+            "rating": data["rating"],
+            "comments": data["comments"],
+            "description": data["description"]
         }
         result = booklog.insert_book(booklog_data)
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@booklog_route.route("/api/booklog/books", methods=["GET"])
+@booklog_route.route("/api/booklog/book/all", methods=["GET"])
 def get_books():
     db_client = get_db_client()
     booklog = booklog_model.Booklog(db_client)
@@ -80,7 +84,7 @@ def get_books():
     else:
         column_names = column_cache[booklog.table_name]
     result = [dict(zip(column_names, row)) for row in result]
-    
+    print(result)
     return jsonify(result)
 
 @booklog_route.route("/api/booklog/books/<book_ids>", methods=["GET"])
@@ -99,7 +103,7 @@ def add_books():
 
         db_client = get_db_client()
         booklog = booklog_model.Booklog(db_client)
-        booklog_data = [(book["title"], book["author"], book["pages"], book["rating"]) for book in data]
+        booklog_data = [(book["title"], book["author"], book["pages"], book["rating"], book["comments"], book["description"]) for book in data]
         booklog.insert_many_books(booklog_data)
         return jsonify(booklog_data)
     except Exception as e:
@@ -109,6 +113,7 @@ def add_books():
 def update_book():
     try:
         data = request.get_json()
+        print(data)
         if 'id' not in data:
             return jsonify({'error': 'Book ID is required'}), 400
 
@@ -119,7 +124,9 @@ def update_book():
             "title": data["title"],
             "author": data["author"],
             "pages": data["pages"],
-            "rating": data["rating"]
+            "rating": data["rating"],
+            "comments": data["comments"] if "comments" in data else None,
+            "description": data["description"] if "description" in data else None
         }
         booklog.update_book(booklog_data)
         return jsonify(booklog_data)

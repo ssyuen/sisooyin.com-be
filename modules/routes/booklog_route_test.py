@@ -20,7 +20,9 @@ def test_get_and_delete_book_by_id(client):
         "title": "Book 1",
         "author": "Author 1",
         "pages": 100,
-        "rating": 5
+        "rating": 5,
+        "comments": "Great book!",
+        "description": "Description 1"
     }
     response = client.post("/api/booklog/book/add", json=book_data)
     inserted_id = response.json
@@ -41,9 +43,10 @@ def test_add_book(client):
         json={            
             "title": "Book 1",
             "author": "Author 1",
-            "description": "Description 1",
             "pages": 100,
-            "rating": 5
+            "rating": 5,
+            "comments": "Great book!",
+            "description": "Description 1"
         }
     )
     inserted_id = response.json
@@ -58,17 +61,19 @@ def test_bulk_add_books(client):
         json=[
             {
                 "title": "Book 1",
-                "author": "Author 1",
-                "description": "Description 1",
+                "author": "Author 1",                
                 "pages": 100,
-                "rating": 5
+                "rating": 5,
+                "comments": "Great book!",
+                "description": "Description 1"
             },
             {
                 "title": "Book 2",
-                "author": "Author 2",
-                "description": "Description 2",
+                "author": "Author 2",                
                 "pages": 200,
-                "rating": 4
+                "rating": 4,
+                "comments": "Great book!",
+                "description": "Description 1"
             }
         ]
     )
@@ -84,7 +89,9 @@ def test_bulk_delete_books(client):
         "title": "Book 1",
         "author": "Author 1",
         "pages": 100,
-        "rating": 5
+        "rating": 5,
+        "comments": "Great book!",
+        "description": "Description 1"
     }
     response = client.post("/api/booklog/book/add", json=book_data)
     inserted_book_id_1 = response.json
@@ -99,7 +106,7 @@ def test_bulk_delete_books(client):
     assert response.status_code == 200
 
 def test_get_books(client):
-    response = client.get("/api/booklog/books")
+    response = client.get("/api/booklog/book/all")
     assert response.status_code == 200
 
 def test_get_books_by_ids(client):
@@ -112,7 +119,9 @@ def test_update_book(client):
         "title": "Book 1",
         "author": "Author 1",
         "pages": 100,
-        "rating": 5
+        "rating": 5,
+        "comments": "Great book!",
+        "description": "Description 1"
     }
     response = client.post("/api/booklog/book/add", json=book_data)
     inserted_id = response.json
