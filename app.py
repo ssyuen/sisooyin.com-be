@@ -32,9 +32,11 @@ def list_of_blueprints():
     from modules.routes.workouts_route import workouts_route
     from modules.routes.watched_episode_route import watched_episode_route
     from modules.routes.booklog_route import booklog_route
+    from modules.routes.oura_route import oura_route
 
     return [episode_route, workouts_route, 
-            watched_episode_route, booklog_route]
+            watched_episode_route, booklog_route,
+            oura_route]
 
 
 
