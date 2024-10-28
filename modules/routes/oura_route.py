@@ -11,7 +11,7 @@ def get_sleep():
     sleep_data = client.fetch_sleep_data(start_date=request.args.get("start_date"), end_date=request.args.get("end_date"))
     return jsonify(sleep_data)
 
-@oura_route.route("/api/workouts", methods=["GET"])
+@oura_route.route("/api/oura_workouts", methods=["GET"])
 def get_workouts():
     client = OuraClient(access_token=os.environ["OURA_PAT"])
     workout_data = client.fetch_workout_data(start_date=request.args.get("start_date"), end_date=request.args.get("end_date"))
