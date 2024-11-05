@@ -3,6 +3,9 @@ import datetime
 import glob
 import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def parse_saga_episode(saga_episode):
     # Split the saga_episode string on the delimiter "à"
