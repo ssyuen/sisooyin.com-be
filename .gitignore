@@ -1,2 +1,5 @@
 .env
 __pycache__
+*.db
+*.pyc
+*.cpython-312.pyc

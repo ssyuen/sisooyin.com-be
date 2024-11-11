@@ -5,7 +5,7 @@ from flask_cors import CORS
 from modules.db.client import Client
 
 from dotenv import load_dotenv
-from modules.db import saga_model, episode_model, workout_model, watched_episode_model, booklog_model
+from modules.db import saga_model, episode_model, workout_model, watched_episode_model, booklog_model, blog_model
 
 load_dotenv()
 
@@ -18,7 +18,7 @@ def get_db_client():
             db_file = get_daily_db_file()
         models = [saga_model.Saga, episode_model.Episode,
                    workout_model.Workout, watched_episode_model.WatchedEpisode,
-                   booklog_model.Booklog]
+                   booklog_model.Booklog, blog_model.Blog]
         g.db_client = Client(db_file, models=models)
         g.db_client.instantiate_tables()
     return g.db_client
@@ -33,10 +33,11 @@ def list_of_blueprints():
     from modules.routes.watched_episode_route import watched_episode_route
     from modules.routes.booklog_route import booklog_route
     from modules.routes.oura_route import oura_route
+    from modules.routes.blog_route import blog_route
 
     return [episode_route, workouts_route, 
             watched_episode_route, booklog_route,
-            oura_route]
+            oura_route, blog_route]
 
 
 
