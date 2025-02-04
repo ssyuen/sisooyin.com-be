@@ -108,6 +108,8 @@ def update_post():
         if 'id' not in data:
             return jsonify({'error': 'ID is required'}), 400
 
+        if 'tags' in data and isinstance(data['tags'], list):
+            data['tags'] = ','.join(data['tags'])
         db_client = get_db_client()
         blog = blog_model.Blog(db_client)
         blog.update_blog(data)
