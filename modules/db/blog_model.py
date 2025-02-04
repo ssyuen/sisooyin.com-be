@@ -6,9 +6,9 @@ class Blog:
     
     def create_table(self, temporary=False):
         if temporary:
-            query = 'CREATE TEMPORARY TABLE IF NOT EXISTS blog (id INTEGER PRIMARY KEY, title TEXT, content TEXT, tags TEXT, date TEXT)'
+            query = 'CREATE TEMPORARY TABLE IF NOT EXISTS blog (id INTEGER PRIMARY KEY, title TEXT, content TEXT, tags TEXT, date TEXT, isPasswordLocked INTEGER)'
         else:
-            query = 'CREATE TABLE IF NOT EXISTS blog (id INTEGER PRIMARY KEY, title TEXT, content TEXT, tags TEXT, date TEXT)'
+            query = 'CREATE TABLE IF NOT EXISTS blog (id INTEGER PRIMARY KEY, title TEXT, content TEXT, tags TEXT, date TEXT, isPasswordLocked INTEGER)'
         self.client.query(query)
 
     def insert_blog(self, blog_data):
@@ -24,19 +24,20 @@ class Blog:
             "title": "Blog 1",
             "content": "Content 1",
             "tags": "tag1, tag2, tag3",
-            "date": "2021-01-01"
+            "date": "2021-01-01",
+            "isPasswordLocked": 0
         }
         """
         # if the tag data comes as an array, unpack it into a string separated by commas
         if isinstance(blog_data["tags"], list):
             blog_data["tags"] = ', '.join(blog_data["tags"])
-        query = 'INSERT INTO blog (title, content, tags, date) VALUES ( ?, ?, ?, ?)'
-        self.client.query(query, ( blog_data["title"], blog_data["content"], blog_data["tags"], blog_data["date"]))
+        query = 'INSERT INTO blog (title, content, tags, date, isPasswordLocked) VALUES ( ?, ?, ?, ?, ?)'
+        self.client.query(query, ( blog_data["title"], blog_data["content"], blog_data["tags"], blog_data["date"], blog_data["isPasswordLocked"]))
         return self.client.cursor.lastrowid
     
     def insert_many_blogs(self, blogs_data):
-        query = 'INSERT INTO blog (title, content, tags, date) VALUES ( ?, ?, ?, ?)'
-        data_tuples = [(blog["title"], blog["content"], blog["tags"], blog["date"]) for blog in blogs_data]
+        query = 'INSERT INTO blog (title, content, tags, date, isPasswordLocked) VALUES ( ?, ?, ?, ?, ?)'
+        data_tuples = [(blog["title"], blog["content"], blog["tags"], blog["date"], blog["isPasswordLocked"]) for blog in blogs_data]
         self.client.cursor.executemany(query, data_tuples)
         last_ids = self.client.cursor.lastrowid
         print(last_ids)
@@ -87,6 +88,9 @@ class Blog:
         if "date" in blog_data:
             fields.append("date = ?")
             values.append(blog_data["date"])
+        if "isPasswordLocked" in blog_data:
+            fields.append("isPasswordLocked = ?")
+            values.append(blog_data["isPasswordLocked"])
         
         values.append(blog_data["id"])
         
@@ -112,6 +116,9 @@ class Blog:
             if "date" in blog_data:
                 fields.append("date = ?")
                 values.append(blog_data["date"])
+            if "isPasswordLocked" in blog_data:
+                fields.append("isPasswordLocked = ?")
+                values.append(blog_data["isPasswordLocked"])
             
             values.append(blog_data["id"])
             

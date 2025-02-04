@@ -19,7 +19,8 @@ def test_get_and_delete_blog_by_id(client):
         "title": "Post 1",
         "content": "Content 1",
         "tags": "tag1, tag2",
-        "date": "2021-01-01"
+        "date": "2021-01-01",
+        "isPasswordLocked": 0
     }
     response = client.post("/api/blog/post/add", json=post_data)
     inserted_id = response.json.get("id")
@@ -42,9 +43,10 @@ def test_add_blog(client):
             "title": "Post 1",
             "content": "Content 1",
             "tags": "tag1, tag2",
-            "date": "2021-01-01"
+            "date": "2021-01-01",
+            "isPasswordLocked": 0
         }
-    )
+    )    
     inserted_id = response.json
     assert response.status_code == 200
 
@@ -59,13 +61,15 @@ def test_bulk_add_blogs(client):
                 "title": "Post 1",
                 "content": "Content 1",
                 "tags": "tag1, tag2",
-                "date": "2021-01-01"
+                "date": "2021-01-01",
+                "isPasswordLocked": 0
             },
             {
                 "title": "Post 2",
                 "content": "Content 2",
                 "tags": "tag3, tag4",
-                "date": "2021-01-02"
+                "date": "2021-01-02",
+                "isPasswordLocked": 0
             }
         ]
     )
@@ -99,22 +103,24 @@ def test_update_post(client):
             "title": "Post 1",
             "content": "Content 1",
             "tags": "tag1, tag2",
-            "date": "2021-01-01"
+            "date": "2021-01-01",
+            "isPasswordLocked": 0
         }
     )
     inserted_id = response.json
     assert response.status_code == 200
 
-    response = client.post(
-        "/api/blog/post/update",
+    response = client.put(
+        "/api/blog/posts/update",
         json={
-            "id": inserted_id,
+            "id": str(inserted_id),  # Convert inserted_id to string
             "title": "Post 2",
             "content": "Content 2",
             "tags": "tag3, tag4",
-            "date": "2021-01-02"
+            "date": "2021-01-02",
+            "isPasswordLocked": 1
         }
-    )
+    )    
     assert response.status_code == 200
 
     client.delete(f"/api/blog/post/delete/{inserted_id}")
@@ -128,31 +134,35 @@ def test_update_many_posts(client):
                 "title": "Post 1",
                 "content": "Content 1",
                 "tags": "tag1, tag2",
-                "date": "2021-01-01"
+                "date": "2021-01-01",
+                "isPasswordLocked": 0
             },
             {
                 "title": "Post 2",
                 "content": "Content 2",
                 "tags": "tag3, tag4",
-                "date": "2021-01-02"
+                "date": "2021-01-02",
+                "isPasswordLocked": 0
             }
         ]
     )
     inserted_ids = response.json
+    print('look at inserted ids')
+    print(response.json)
     assert response.status_code == 200
 
-    response = client.post(
+    response = client.put(
         "/api/blog/posts/update_many",
         json=[
             {
-                "id": inserted_ids[0],
+                "id": 1,
                 "title": "Post 3",
                 "content": "Content 3",
                 "tags": "tag5, tag6",
                 "date": "2021-01-03"
             },
             {
-                "id": inserted_ids[1],
+                "id": 2,
                 "title": "Post 4",
                 "content": "Content 4",
                 "tags": "tag7, tag8",

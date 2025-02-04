@@ -34,7 +34,8 @@ def test_insert_blog(blog):
         "title": "Blog 1",
         "tags": "tag1, tag2, tag3",
         "date": "2021-01-01",
-        "content": "Content 1"
+        "content": "Content 1",
+        "isPasswordLocked": 0
     }
     
     # Insert the blog data into the blog table
@@ -43,7 +44,7 @@ def test_insert_blog(blog):
     # Verify the data was inserted correctly
     result = blog.get_blog(blog_data["id"])
     assert len(result) == 1
-    assert result[0] == (blog_data["id"], blog_data["title"], blog_data["content"], blog_data["tags"] ,blog_data["date"])
+    assert result[0] == (blog_data["id"], blog_data["title"], blog_data["content"], blog_data["tags"] ,blog_data["date"], 0)
     blog.delete_blog(blog_data["id"])
 
 def test_insert_many_blogs(blog):
@@ -53,13 +54,15 @@ def test_insert_many_blogs(blog):
                 "title": "Post 1",
                 "content": "Content 1",
                 "tags": "tag1, tag2",
-                "date": "2021-01-01"
+                "date": "2021-01-01",
+                "isPasswordLocked": 0
             },
             {
                 "title": "Post 2",
                 "content": "Content 2",
                 "tags": "tag3, tag4",
-                "date": "2021-01-02"
+                "date": "2021-01-02",
+                "isPasswordLocked": 0
             }
         ]
     
@@ -70,7 +73,7 @@ def test_insert_many_blogs(blog):
 
     # Verify the data was inserted correctly
     for i, data in enumerate(blog_data):
-        assert result[i] == (i+1, data["title"], data["content"], data["tags"], data["date"])
+        assert result[i] == (i+1, data["title"], data["content"], data["tags"], data["date"], 0)
     blog.delete_many_blogs([1, 2])
 
 def test_get_blog(blog):
@@ -80,7 +83,8 @@ def test_get_blog(blog):
         "title": "Blog 1",
         "tags": "tag1, tag2, tag3",
         "date": "2021-01-01",
-        "content": "Content 1"
+        "content": "Content 1",
+        "isPasswordLocked": 0
     }
     
     # Insert the blog data into the blog table
@@ -89,15 +93,15 @@ def test_get_blog(blog):
     # Retrieve the blog by its ID
     result = blog.get_blog(blog_data["id"])
     assert len(result) == 1
-    assert result[0] == (blog_data["id"], blog_data["title"], blog_data["content"], blog_data["tags"] ,blog_data["date"])
+    assert result[0] == (blog_data["id"], blog_data["title"], blog_data["content"], blog_data["tags"] ,blog_data["date"], 0)
     blog.delete_blog(blog_data["id"])
 
 def test_get_many_blogs(blog):
     # Example blog data
     blog_data = [
-        ("Blog 1", "Tag 1, Tag 2", "Content 1", "2021-01-01"),
-        ("Blog 2", "Tag 1, Tag 2", "Content 2", "2021-01-02"),
-        ("Blog 3", "Tag 1, Tag 2", "Content 3", "2021-01-03")
+        ("Blog 1", "Tag 1, Tag 2", "Content 1", "2021-01-01", 0),
+        ("Blog 2", "Tag 1, Tag 2", "Content 2", "2021-01-02", 0),
+        ("Blog 3", "Tag 1, Tag 2", "Content 3", "2021-01-03", 0)
     ]
     
     # Insert the blog data into the blog table

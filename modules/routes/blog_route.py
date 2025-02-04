@@ -53,7 +53,7 @@ def add_post():
     try:
         data = request.get_json()
         print(data)
-        if 'title' not in data or 'tags' not in data or 'content' not in data or 'date' not in data:
+        if 'title' not in data or 'tags' not in data or 'content' not in data or 'isPasswordLocked' not in data or 'date' not in data:
             return jsonify({'error': 'Title, tags, and content, date are required'}), 400
 
         db_client = get_db_client()
@@ -61,6 +61,7 @@ def add_post():
         inserted_id = blog.insert_blog(data)
         return jsonify({'success': 'Post added successfully', 'id': inserted_id})
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)}), 500
     
 @blog_route.route("/api/blog/posts", methods=["GET"])
